@@ -4,58 +4,917 @@
   <meta charset="utf-8" />
   <title>FirstPR • Beginner Issues Helper</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root{
+      --bg: #0a0a0f;
+      --bg-2: #0f1129;
+      --panel: #111731;
+      --panel-2: #1a2040;
+      --ink: #e8ecff;
+      --muted: #a4b2ff;
+      --line: #1a2550;
+      --accent: #8056ff;
+      --accent-2: #9b72ff;
+      --success: #00d4aa;
+      --success-2: #00b894;
+      --pink: #ff58a6;
+      --cyan: #00f2fe;
+      --warning: #ffd93d;
+      --error: #ff6b6b;
+    }
+
+    * { box-sizing: border-box; }
+    
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: linear-gradient(135deg, var(--bg) 0%, var(--bg-2) 100%);
+      color: var(--ink);
+      font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+
+    /* Animated background */
+    .bg-effects {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.6;
+      overflow: hidden;
+    }
+
+    .bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(128, 86, 255, 0.15) 0%, transparent 70%);
+      animation: float 15s infinite ease-in-out;
+    }
+
+    .bg-orb:nth-child(1) {
+      width: 400px;
+      height: 400px;
+      top: -100px;
+      right: -100px;
+      background: radial-gradient(circle, rgba(0, 212, 170, 0.12) 0%, transparent 70%);
+    }
+
+    .bg-orb:nth-child(2) {
+      width: 300px;
+      height: 300px;
+      bottom: -50px;
+      left: -50px;
+      animation-delay: -5s;
+    }
+
+    .bg-orb:nth-child(3) {
+      width: 200px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: -10s;
+      background: radial-gradient(circle, rgba(255, 88, 166, 0.1) 0%, transparent 70%);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-20px) scale(1.1); }
+    }
+
+    /* Layout */
+    .app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Enhanced Header */
+    .header {
+      padding: 20px 24px;
+      background: linear-gradient(135deg, rgba(17, 23, 49, 0.95) 0%, rgba(26, 32, 80, 0.9) 100%);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      display: inline-grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--pink), var(--accent));
+      color: var(--bg);
+      box-shadow: 
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+        0 8px 32px rgba(128, 86, 255, 0.3),
+        0 0 20px rgba(255, 88, 166, 0.2);
+      animation: logoPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes logoPulse {
+      0%, 100% { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset, 0 8px 32px rgba(128, 86, 255, 0.3), 0 0 20px rgba(255, 88, 166, 0.2); }
+      50% { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2) inset, 0 12px 40px rgba(128, 86, 255, 0.4), 0 0 30px rgba(255, 88, 166, 0.3); }
+    }
+
+    .brand-content h1 {
+      margin: 0;
+      font-weight: 800;
+      font-size: 1.4rem;
+      background: linear-gradient(135deg, var(--success), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sub {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Enhanced Controls */
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .input-group {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(15, 21, 48, 0.8) 0%, rgba(26, 37, 80, 0.6) 100%);
+      color: var(--ink);
+      outline: none;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .input:focus {
+      border-color: var(--accent);
+      box-shadow: 
+        0 0 0 3px rgba(128, 86, 255, 0.2),
+        0 8px 32px rgba(128, 86, 255, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .input::placeholder {
+      color: var(--muted);
+      opacity: 0.7;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, var(--success), var(--success-2));
+      color: var(--bg);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 
+        0 4px 20px rgba(0, 212, 170, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 8px 30px rgba(0, 212, 170, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+    }
+
+    .btn:focus {
+      outline: 3px solid rgba(0, 212, 170, 0.4);
+    }
+
+    .btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Enhanced Chat */
+    .chat {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+    }
+
+    .chat::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .chat::-webkit-scrollbar-thumb {
+      background: var(--line);
+      border-radius: 3px;
+    }
+
+    .chat::-webkit-scrollbar-thumb:hover {
+      background: var(--muted);
+    }
+
+    .msg {
+      max-width: min(700px, 85%);
+      padding: 16px 20px;
+      border-radius: 20px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      position: relative;
+      animation: messageSlideIn 0.3s ease-out;
+      backdrop-filter: blur(10px);
+    }
+
+    @keyframes messageSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .msg.user {
+      margin-left: auto;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+      color: var(--bg);
+      box-shadow: 
+        0 8px 32px rgba(128, 86, 255, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+      border-bottom-right-radius: 8px;
+    }
+
+    .msg.assistant {
+      margin-right: auto;
+      background: linear-gradient(135deg, rgba(17, 23, 49, 0.9) 0%, rgba(26, 37, 80, 0.8) 100%);
+      border: 1px solid var(--line);
+      border-bottom-left-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .msg.assistant::before {
+      content: '🤖';
+      position: absolute;
+      left: -12px;
+      top: 16px;
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, var(--success), var(--cyan));
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3);
+    }
+
+    /* Enhanced Typing Indicator */
+    .typing-holder {
+      background: linear-gradient(135deg, rgba(17, 23, 49, 0.9) 0%, rgba(26, 37, 80, 0.8) 100%);
+      border: 1px solid var(--line);
+      animation: typingPulse 1s ease-in-out infinite;
+    }
+
+    @keyframes typingPulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+
+    .typing {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+    }
+
+    .typing::before {
+      content: 'AI is thinking';
+      font-size: 0.9rem;
+      margin-right: 8px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      animation: bounce 1.4s infinite ease-in-out;
+      box-shadow: 0 0 10px rgba(0, 212, 170, 0.5);
+    }
+
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0) scale(1); opacity: 0.7; }
+      40% { transform: translateY(-8px) scale(1.2); opacity: 1; }
+    }
+
+    /* Enhanced Composer */
+    .composer {
+      display: flex;
+      gap: 12px;
+      padding: 20px 24px;
+      background: linear-gradient(135deg, rgba(17, 23, 49, 0.95) 0%, rgba(26, 32, 80, 0.9) 100%);
+      border-top: 1px solid var(--line);
+      backdrop-filter: blur(20px);
+      position: sticky;
+      bottom: 0;
+    }
+
+    .composer textarea {
+      flex: 1;
+      resize: none;
+      padding: 16px 20px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(15, 21, 48, 0.8) 0%, rgba(26, 37, 80, 0.6) 100%);
+      color: var(--ink);
+      outline: none;
+      font-family: inherit;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .composer textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 
+        0 0 0 3px rgba(128, 86, 255, 0.2),
+        0 8px 32px rgba(128, 86, 255, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .composer textarea::placeholder {
+      color: var(--muted);
+      opacity: 0.7;
+    }
+
+    .send {
+      width: 52px;
+      min-width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      border: 0;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--success), var(--success-2));
+      color: var(--bg);
+      display: grid;
+      place-items: center;
+      transition: all 0.3s ease;
+      box-shadow: 
+        0 4px 20px rgba(0, 212, 170, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .send::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.4s;
+    }
+
+    .send:hover::before {
+      left: 100%;
+    }
+
+    .send:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 
+        0 8px 30px rgba(0, 212, 170, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+    }
+
+    .send:focus {
+      outline: 3px solid rgba(0, 212, 170, 0.4);
+    }
+
+    .send svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Status indicators */
+    .status-indicator {
+      position: absolute;
+      top: 8px;
+      right: 16px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 10px rgba(0, 212, 170, 0.6);
+      animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header {
+        padding: 16px 20px;
+      }
+      
+      .controls {
+        flex-direction: column;
+      }
+      
+      .input-group {
+        min-width: unset;
+      }
+      
+      .chat {
+        padding: 20px 16px;
+      }
+      
+      .msg {
+        max-width: 90%;
+        padding: 14px 16px;
+      }
+      
+      .composer {
+        padding: 16px 20px;
+      }
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      .bg-orb,
+      .logo,
+      .dot,
+      .status-indicator {
+        animation: none;
+      }
+      
+      .msg {
+        animation: none;
+      }
+      
+      .btn,
+      .input,
+      .composer textarea,
+      .send {
+        transition: none;
+      }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Welcome message styling */
+    .welcome-msg {
+      text-align: center;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, rgba(128, 86, 255, 0.1) 0%, rgba(0, 212, 170, 0.1) 100%);
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      margin: 20px 0;
+    }
+
+    .welcome-msg h2 {
+      margin: 0 0 12px 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--success), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .welcome-msg p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+  </style>
 </head>
 <body>
+  <div class="bg-effects">
+    <div class="bg-orb"></div>
+    <div class="bg-orb"></div>
+    <div class="bg-orb"></div>
+  </div>
+
   <div class="app">
-    <!-- Header -->
+    <!-- Enhanced Header -->
     <header class="header">
+      <div class="status-indicator" title="Connected"></div>
       <div class="brand">
         <span class="logo" aria-hidden="true">
-          <!-- simple icon -->
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
             <path d="M3 7a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7zm2 0v11h14V7H5zm3 3h8v2H8v-2z"/>
           </svg>
         </span>
-        <div>
+        <div class="brand-content">
           <h1>FirstPR</h1>
-          <p class="sub">Find beginner issues and get step-by-step help</p>
+          <p class="sub">AI-powered beginner issue finder</p>
         </div>
       </div>
 
-      <!-- Controls -->
+      <!-- Enhanced Controls -->
       <form id="controls" class="controls" autocomplete="off">
-        <input id="repo" class="input" type="url"
-               placeholder="https://github.com/owner/repo"
-               aria-label="GitHub repository URL" />
-        <input id="skills" class="input" type="text"
-               placeholder="llm, rag, vectordb, api, docker"
-               aria-label="Your skills (comma separated)" />
-        <button class="btn" id="startBtn" type="submit" title="Start">
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-            <path fill="currentColor" d="M3 12l18-9-6 18-3-7-9-2z"/>
+        <div class="input-group">
+          <input id="repo" class="input" type="url"
+                 placeholder="https://github.com/owner/repo"
+                 aria-label="GitHub repository URL" />
+        </div>
+        <div class="input-group">
+          <input id="skills" class="input" type="text"
+                 placeholder="python, react, api, docker, ml"
+                 aria-label="Your skills (comma separated)" />
+        </div>
+        <button class="btn" id="startBtn" type="submit" title="Analyze Repository">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z"/>
           </svg>
-          <span>Start</span>
+          <span>Analyze</span>
         </button>
       </form>
     </header>
 
-    <!-- Chat -->
-    <main class="chat" id="chat" role="log" aria-live="polite"></main>
+    <!-- Enhanced Chat -->
+    <main class="chat" id="chat" role="log" aria-live="polite">
+      <div class="welcome-msg">
+        <h2>Welcome to FirstPR! 🚀</h2>
+        <p>Enter a GitHub repository URL and your skills above to discover perfect beginner issues tailored just for you. I'll provide step-by-step guidance to help you make your first contribution!</p>
+      </div>
+    </main>
 
-    <!-- Composer -->
+    <!-- Enhanced Composer -->
     <footer class="composer">
       <label for="msg" class="sr-only">Message</label>
-      <textarea id="msg" rows="1" placeholder="Ask for help (e.g., ‘help with issue 2’ or paste issue URL)…"></textarea>
-      <button class="send" id="sendBtn" title="Send (Enter)">
-        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-          <path fill="currentColor" d="M2 21l21-9L2 3l5 8-5 10zm7-5.5l-2-3.5 9-4-7 7.5z"/>
+      <textarea id="msg" rows="1" 
+                placeholder="Ask for help, paste an issue URL, or describe what you'd like to work on..."></textarea>
+      <button class="send" id="sendBtn" title="Send message (Enter)">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M2 21l21-9L2 3l5 8-5 10zm7-5.5l-2-3.5 9-4-7 7.5z"/>
         </svg>
       </button>
     </footer>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
-  <script src="app.js" type="module"></script>
+  
+  <script>
+    // ---------- CONFIG ----------
+    const BACKEND = "https://confusedguy-firstpr-backend.hf.space"; 
+
+    // ---------- DOM ----------
+    const $ = (s) => document.querySelector(s);
+    const chat = $("#chat");
+    const repoInput = $("#repo");
+    const skillsInput = $("#skills");
+    const form = $("#controls");
+    const msgBox = $("#msg");
+    const sendBtn = $("#sendBtn");
+
+    // ---------- STATE ----------
+    const state = {
+      repoUrl: "",
+      skills: [],
+      activeIssueUrl: "",
+      messages: [] 
+    };
+
+    restore();
+
+    // ---------- UI helpers ----------
+    function addMessage(role, content) {
+      // Remove welcome message when first real message arrives
+      const welcomeMsg = chat.querySelector('.welcome-msg');
+      if (welcomeMsg && (role === 'user' || role === 'assistant')) {
+        welcomeMsg.remove();
+      }
+
+      const el = document.createElement("div");
+      el.className = `msg ${role}`;
+      el.textContent = content;
+      chat.appendChild(el);
+      chat.scrollTop = chat.scrollHeight;
+      state.messages.push({ role, content });
+      persist();
+
+      // Add some sparkle effect for assistant messages
+      if (role === 'assistant') {
+        createMessageSparkles(el);
+      }
+    }
+
+    function createMessageSparkles(messageEl) {
+      const rect = messageEl.getBoundingClientRect();
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => {
+          const sparkle = document.createElement('div');
+          sparkle.style.cssText = `
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--success);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+            left: ${rect.left + Math.random() * rect.width}px;
+            top: ${rect.top + Math.random() * rect.height}px;
+            animation: sparkleUp 1s ease-out forwards;
+          `;
+          document.body.appendChild(sparkle);
+          setTimeout(() => sparkle.remove(), 1000);
+        }, i * 200);
+      }
+    }
+
+    // Add sparkle animation
+    const sparkleStyle = document.createElement('style');
+    sparkleStyle.textContent = `
+      @keyframes sparkleUp {
+        0% { transform: translateY(0) scale(1); opacity: 1; }
+        100% { transform: translateY(-20px) scale(0); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(sparkleStyle);
+
+    function setTyping(on) {
+      let el = chat.querySelector(".msg.typing-holder");
+      if (on) {
+        if (!el) {
+          el = document.createElement("div");
+          el.className = "msg assistant typing-holder";
+          el.innerHTML = `<span class="typing">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </span>`;
+          chat.appendChild(el);
+          chat.scrollTop = chat.scrollHeight;
+        }
+      } else if (el) {
+        el.remove();
+      }
+    }
+
+    function autoSizeTextarea() {
+      msgBox.style.height = "auto";
+      msgBox.style.height = Math.min(120, msgBox.scrollHeight) + "px";
+    }
+
+    // ---------- Backend helper ----------
+    async function api(path, payload) {
+      const r = await fetch(`${BACKEND}${path}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload || {})
+      });
+      let data = {};
+      try { data = await r.json(); } catch {}
+      if (!r.ok) {
+        const msg = (data && (data.detail || data.message)) || `HTTP ${r.status}`;
+        throw new Error(msg);
+      }
+      return data;
+    }
+
+    // ---------- Events ----------
+    form.addEventListener("submit", onSubmit);
+    sendBtn.addEventListener("click", send);
+    msgBox.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) { 
+        e.preventDefault(); 
+        send(); 
+      }
+    });
+    msgBox.addEventListener("input", autoSizeTextarea);
+    autoSizeTextarea();
+
+    // Add input focus effects
+    const inputs = document.querySelectorAll('.input, textarea');
+    inputs.forEach(input => {
+      input.addEventListener('focus', () => {
+        input.style.transform = 'translateY(-1px)';
+      });
+      input.addEventListener('blur', () => {
+        input.style.transform = '';
+      });
+    });
+
+    // ---------- Submit (repo + skills) ----------
+    async function onSubmit(e) {
+      e.preventDefault();
+      const repoUrl = repoInput.value.trim();
+      const skills = skillsInput.value.split(",").map(s => s.trim()).filter(Boolean);
+
+      state.repoUrl = repoUrl;
+      state.skills = skills;
+      state.activeIssueUrl = "";
+      persist();
+
+      if (!repoUrl || !skills.length) {
+        addMessage("assistant", "Please enter a repository URL and at least one skill to get started! 💡");
+        return;
+      }
+
+      setTyping(true);
+      try {
+        // 1) send skills
+        await api("/init", { skills });
+
+        // 2) get recommendations
+        const res = await api("/recommend", { repo_url: repoUrl, max_issues: 15 });
+        setTyping(false);
+
+        const msg = res.message || "Hmm, no suitable issues found in this repository.";
+        addMessage("assistant", msg);
+        addMessage("assistant", "✨ Found some issues? Paste an issue URL and I'll create a step-by-step plan to help you contribute!");
+      } catch (err) {
+        setTyping(false);
+        addMessage("assistant", `❌ Oops! ${err.message}`);
+      }
+    }
+
+    // ---------- Send (freeform chat) ----------
+    async function send() {
+      const text = msgBox.value.trim();
+      if (!text) return;
+      
+      msgBox.value = ""; 
+      autoSizeTextarea();
+      addMessage("user", text);
+
+      if (!state.repoUrl) {
+        addMessage("assistant", "👆 First, please load a repository and add your skills using the form above!");
+        return;
+      }
+
+      const m = text.match(/https?:\/\/\S+/);
+      const url = m ? m[0].replace(/[).,]$/, "") : null;
+
+      // If a new issue URL is pasted → make a plan and set active issue
+      if (url) {
+        setTyping(true);
+        try {
+          const res = await api("/plan", { repo_url: state.repoUrl, issue_url: url, constraints: "" });
+          setTyping(false);
+          addMessage("assistant", res.plan || "🤔 I couldn't create a plan for this issue. Try another one?");
+          state.activeIssueUrl = url;
+          persist();
+        } catch (err) {
+          setTyping(false);
+          addMessage("assistant", `❌ Error: ${err.message}`);
+        }
+        return;
+      }
+
+      // No new URL: if we already have an active issue → continue the chat
+      if (state.activeIssueUrl) {
+        setTyping(true);
+        try {
+          const res = await api("/chat", {
+            repo_url: state.repoUrl,
+            issue_url: state.activeIssueUrl,
+            history: state.messages.slice(-12) // last few turns
+          });
+          setTyping(false);
+          addMessage("assistant", res.reply || "🤷‍♂️ I'm not sure how to help with that.");
+        } catch (err) {
+          setTyping(false);
+          addMessage("assistant", `❌ Error: ${err.message}`);
+        }
+        return;
+      }
+
+      // No active issue yet
+      addMessage("assistant", "📎 Please paste the exact GitHub issue URL you want to work on, and I'll help you tackle it step by step!");
+    }
+
+    // ---------- Persistence ----------
+    function persist() {
+      sessionStorage.setItem("firstpr_state", JSON.stringify(state));
+    }
+
+    function restore() {
+      const raw = sessionStorage.getItem("firstpr_state");
+      if (!raw) return;
+      try {
+        const s = JSON.parse(raw);
+        state.repoUrl = s.repoUrl || "";
+        state.skills = s.skills || [];
+        state.messages = Array.isArray(s.messages) ? s.messages : [];
+        state.activeIssueUrl = s.activeIssueUrl || "";
+        repoInput.value = state.repoUrl;
+        skillsInput.value = state.skills.join(", ");
+        
+        // Restore messages but keep welcome message if no messages
+        if (state.messages.length > 0) {
+          const welcomeMsg = chat.querySelector('.welcome-msg');
+          if (welcomeMsg) welcomeMsg.remove();
+          state.messages.forEach(m => {
+            const el = document.createElement("div");
+            el.className = `msg ${m.role}`;
+            el.textContent = m.content;
+            chat.appendChild(el);
+          });
+        }
+      } catch (e) {
+        console.error('Error restoring state:', e);
+      }
+    }
+
+    // Add some interactive feedback
+    const statusIndicator = document.querySelector('.status-indicator');
+    let statusInterval;
+
+    function updateStatus(status) {
+      if (status === 'thinking') {
+        statusIndicator.style.background = 'var(--warning)';
+        statusIndicator.style.boxShadow = '0 0 10px rgba(255, 217, 61, 0.6)';
+        statusIndicator.title = 'AI is thinking...';
+      } else if (status === 'error') {
+        statusIndicator.style.background = 'var(--error)';
+        statusIndicator.style.boxShadow = '0 0 10px rgba(255, 107, 107, 0.6)';
+        statusIndicator.title = 'Error occurred';
+        setTimeout(() => updateStatus('ready'), 3000);
+      } else {
+        statusIndicator.style.background = 'var(--success)';
+        statusIndicator.style.boxShadow = '0 0 10px rgba(0, 212, 170, 0.6)';
+        statusIndicator.title = 'Ready';
+      }
+    }
+
+    // Update the setTyping function to change status
+    const originalSetTyping = setTyping;
+    setTyping = function(on) {
+      originalSetTyping(on);
+      updateStatus(on ? 'thinking' : 'ready');
+    };
+
+    // Initialize
+    updateStatus('ready');
+  </script>
 </body>
 </html>
