@@ -1,0 +1,334 @@
+{
+  "ai": [
+    "artificial intelligence", "AI", "machine learning", "ML", "deep learning", "neural networks", 
+    "large language models", "LLM", "chatbot", "AI model", "generative AI", "smart systems",
+    "automated", "intelligent", "prediction", "classification", "recommendation system",
+    "AI ethics", "bias", "fairness", "explainable AI", "responsible AI", "AI safety"
+  ],
+  
+  "ml": [
+    "machine learning", "ML", "supervised learning", "unsupervised learning", "training data",
+    "model training", "prediction", "classification", "regression", "clustering", 
+    "feature", "dataset", "algorithm", "model accuracy", "overfitting", "underfitting",
+    "cross-validation", "hyperparameter", "scikit-learn", "model evaluation", "performance metrics",
+    "data preprocessing", "feature engineering", "model selection", "ensemble methods"
+  ],
+  
+  "dl": [
+    "deep learning", "neural network", "CNN", "RNN", "transformer", "pytorch", "tensorflow",
+    "keras", "training", "epochs", "batch size", "learning rate", "gradient descent",
+    "activation function", "dropout", "batch normalization", "model architecture",
+    "transfer learning", "fine-tuning", "pre-trained model", "GPU training", "model weights"
+  ],
+  
+  "llm": [
+    "large language model", "LLM", "GPT", "BERT", "transformer", "text generation",
+    "prompt", "prompt engineering", "few-shot", "zero-shot", "in-context learning",
+    "instruction following", "chat model", "text completion", "tokenization", "context window",
+    "temperature", "top-p", "max tokens", "system prompt", "user prompt", "model response"
+  ],
+  
+  "nlp": [
+    "natural language processing", "NLP", "text processing", "text analysis", "tokenization",
+    "sentiment analysis", "text classification", "named entity recognition", "NER",
+    "question answering", "text summarization", "machine translation", "language model",
+    "word embeddings", "text preprocessing", "language understanding", "text mining"
+  ],
+  
+  "cv": [
+    "computer vision", "image processing", "image classification", "object detection",
+    "image recognition", "face detection", "OCR", "image segmentation", "opencv",
+    "image preprocessing", "data augmentation", "image dataset", "CNN", "vision model",
+    "image analysis", "pattern recognition", "visual AI", "image annotation"
+  ],
+  
+  "vectordb": [
+    "vector database", "vector search", "similarity search", "semantic search",
+    "embedding storage", "nearest neighbor", "vector index", "similarity matching",
+    "qdrant", "chroma", "weaviate", "pinecone", "faiss", "vector similarity",
+    "dense retrieval", "vector operations", "search index", "metadata filtering"
+  ],
+  
+  "rag": [
+    "retrieval augmented generation", "RAG", "document retrieval", "context injection",
+    "knowledge base", "document search", "text chunking", "chunk size", "overlap",
+    "retrieval system", "grounding", "context window", "document processing",
+    "query expansion", "reranking", "retrieval accuracy", "context relevance"
+  ],
+  
+  "embedding": [
+    "text embedding", "vector embedding", "sentence embedding", "semantic similarity",
+    "embedding model", "vector representation", "cosine similarity", "embedding space",
+    "text vectorization", "dense vectors", "embedding dimension", "similarity score",
+    "embedding fine-tuning", "multilingual embedding", "domain-specific embedding"
+  ],
+  
+  "api": [
+    "API", "REST API", "HTTP request", "GET request", "POST request", "API endpoint",
+    "JSON response", "API key", "authentication", "rate limiting", "API documentation",
+    "swagger", "postman", "curl", "requests library", "status code", "error handling",
+    "API design", "RESTful", "API testing", "API integration", "webhook"
+  ],
+  
+  "api_keys": [
+    "API key", "authentication", "authorization", "token", "bearer token", "JWT",
+    "OAuth", "login", "user permissions", "access control", "security",
+    "environment variables", "env file", "secrets", "credentials", "SSL", "HTTPS",
+    "session", "password", "encryption", "secure API", "API security"
+  ],
+  
+  "openai": [
+    "OpenAI API", "GPT-4", "ChatGPT", "OpenAI models", "chat completion", "text generation",
+    "API call", "prompt", "response", "temperature", "max tokens", "system message",
+    "user message", "assistant message", "function calling", "streaming", "API usage",
+    "embeddings API", "DALL-E", "Whisper", "text-to-speech", "speech-to-text"
+  ],
+  
+  "langchain": [
+    "LangChain", "AI application framework", "chains", "agents", "tools", "memory",
+    "chat memory", "conversation history", "document loader", "text splitter",
+    "prompt template", "output parser", "retriever", "vector store", "LLM wrapper",
+    "agent executor", "tool calling", "callback", "streaming", "LangSmith"
+  ],
+  
+  "llamaindex": [
+    "LlamaIndex", "data framework", "document indexing", "query engine", "chat engine",
+    "data connector", "node parser", "response synthesizer", "retrieval", "RAG framework",
+    "knowledge base", "document store", "metadata", "filtering", "multi-modal"
+  ],
+  
+  "cloud": [
+    "cloud computing", "cloud deployment", "cloud storage", "serverless", "container",
+    "scaling", "load balancing", "CDN", "cloud database", "backup", "monitoring",
+    "logging", "analytics", "cost optimization", "multi-region", "availability"
+  ],
+  
+  "gcp": [
+    "Google Cloud", "GCP", "Cloud Run", "Vertex AI", "Cloud Storage", "BigQuery",
+    "Cloud Functions", "serverless", "container deployment", "AI platform",
+    "cloud database", "authentication", "IAM", "billing", "monitoring"
+  ],
+  
+  "aws": [
+    "Amazon Web Services", "AWS", "S3", "Lambda", "EC2", "Bedrock", "SageMaker",
+    "serverless", "cloud storage", "container", "database", "API Gateway",
+    "CloudWatch", "IAM", "billing", "auto-scaling", "load balancer"
+  ],
+  
+  "azure": [
+    "Microsoft Azure", "Azure OpenAI", "Azure Functions", "Azure Storage", "Azure ML",
+    "App Service", "container service", "database", "authentication", "monitoring",
+    "cost management", "scaling", "security", "backup"
+  ],
+  
+  "docker": [
+    "Docker", "container", "containerization", "Dockerfile", "docker build", "docker run",
+    "docker compose", "image", "port mapping", "volume", "container registry",
+    "microservices", "deployment", "development environment", "isolation"
+  ],
+  
+  "kubernetes": [
+    "Kubernetes", "k8s", "container orchestration", "pod", "deployment", "service",
+    "cluster", "node", "scaling", "load balancing", "helm", "kubectl",
+    "configuration", "secrets", "monitoring", "logging", "namespace"
+  ],
+  
+  "frontend": [
+    "frontend", "user interface", "UI", "user experience", "UX", "web app", "dashboard",
+    "responsive design", "mobile-friendly", "interactive", "form", "button", "navigation",
+    "layout", "styling", "theme", "component", "widget", "accessibility"
+  ],
+  
+  "streamlit": [
+    "Streamlit", "web app", "data app", "dashboard", "UI", "widget", "form", "chart",
+    "plot", "sidebar", "layout", "file upload", "download", "session state",
+    "caching", "deployment", "sharing", "interactive", "demo app"
+  ],
+  
+  "flask": [
+    "Flask", "Python web framework", "web server", "route", "endpoint", "template",
+    "form", "database", "session", "cookie", "authentication", "API",
+    "web development", "backend", "request", "response", "deployment"
+  ],
+  
+  "fastapi": [
+    "FastAPI", "Python API framework", "async", "automatic documentation", "type hints",
+    "validation", "dependency injection", "middleware", "authentication", "testing",
+    "performance", "API docs", "swagger", "backend development"
+  ],
+  
+  "database": [
+    "database", "data storage", "SQL", "query", "table", "record", "field", "primary key",
+    "foreign key", "index", "join", "relationship", "transaction", "backup",
+    "migration", "schema", "connection", "CRUD operations", "data integrity"
+  ],
+  
+  "sql": [
+    "SQL", "database query", "SELECT", "INSERT", "UPDATE", "DELETE", "JOIN", "WHERE",
+    "GROUP BY", "ORDER BY", "table", "column", "row", "primary key", "foreign key",
+    "index", "view", "stored procedure", "database design", "normalization"
+  ],
+  
+  "nosql": [
+    "NoSQL", "document database", "key-value store", "MongoDB", "JSON", "collection",
+    "document", "flexible schema", "horizontal scaling", "replication", "sharding",
+    "eventual consistency", "distributed database", "real-time", "big data"
+  ],
+  
+  "redis": [
+    "Redis", "cache", "in-memory database", "key-value store", "session storage",
+    "rate limiting", "pub/sub", "messaging", "performance", "fast access",
+    "distributed cache", "data structures", "persistence", "clustering"
+  ],
+  
+  "web_dev": [
+    "web development", "website", "web application", "frontend", "backend", "full-stack",
+    "responsive design", "mobile-first", "progressive web app", "PWA", "SEO",
+    "performance", "accessibility", "cross-browser", "user experience", "UX"
+  ],
+  
+  "html": [
+    "HTML", "markup", "web structure", "semantic HTML", "form", "table", "link",
+    "image", "accessibility", "SEO", "meta tags", "responsive", "validation",
+    "clean code", "best practices", "web standards", "browser compatibility"
+  ],
+  
+  "css": [
+    "CSS", "styling", "layout", "responsive design", "flexbox", "grid", "animation",
+    "media query", "mobile-first", "CSS framework", "Bootstrap", "Tailwind",
+    "custom CSS", "theme", "design system", "cross-browser", "performance"
+  ],
+  
+  "js": [
+    "JavaScript", "JS", "interactive", "DOM manipulation", "event handling", "async",
+    "API call", "JSON", "ES6", "modern JavaScript", "arrow function", "promise",
+    "async/await", "module", "package", "npm", "browser support", "debugging"
+  ],
+  
+  "react": [
+    "React", "component", "JSX", "state", "props", "hook", "useState", "useEffect",
+    "functional component", "virtual DOM", "React app", "single page application", "SPA",
+    "routing", "state management", "Redux", "testing", "performance", "deployment"
+  ],
+  
+  "nextjs": [
+    "Next.js", "React framework", "server-side rendering", "SSR", "static generation", "SSG",
+    "file-based routing", "API routes", "image optimization", "performance", "SEO",
+    "deployment", "Vercel", "production-ready", "TypeScript support"
+  ],
+  
+  "python": [
+    "Python", "programming", "script", "automation", "data analysis", "web development",
+    "machine learning", "pandas", "numpy", "jupyter notebook", "pip", "package",
+    "virtual environment", "clean code", "debugging", "testing", "documentation"
+  ],
+  
+  "pandas": [
+    "pandas", "data analysis", "DataFrame", "CSV", "Excel", "data cleaning",
+    "data manipulation", "filter", "group by", "merge", "join", "pivot table",
+    "missing values", "data types", "aggregation", "sorting", "visualization"
+  ],
+  
+  "numpy": [
+    "NumPy", "numerical computing", "array", "matrix", "mathematical operations",
+    "linear algebra", "statistics", "performance", "vectorization", "scientific computing",
+    "data processing", "memory efficient", "broadcasting", "random numbers"
+  ],
+  
+  "visualization": [
+    "data visualization", "chart", "graph", "plot", "dashboard", "interactive",
+    "matplotlib", "seaborn", "plotly", "bar chart", "line chart", "scatter plot",
+    "histogram", "heatmap", "time series", "dashboard", "business intelligence"
+  ],
+  
+  "statistics": [
+    "statistics", "data analysis", "mean", "median", "standard deviation", "correlation",
+    "regression", "hypothesis testing", "A/B testing", "probability", "distribution",
+    "confidence interval", "p-value", "statistical significance", "data insights"
+  ],
+  
+  "excel": [
+    "Excel", "spreadsheet", "formula", "function", "pivot table", "chart", "graph",
+    "VLOOKUP", "data analysis", "conditional formatting", "automation", "macro",
+    "data validation", "dashboard", "reporting", "financial modeling"
+  ],
+  
+  "version_control": [
+    "version control", "Git", "GitHub", "GitLab", "repository", "repo", "commit",
+    "branch", "merge", "pull request", "PR", "code review", "collaboration",
+    "backup", "history", "branching", "workflow", "open source", "contribution"
+  ],
+  
+  "git": [
+    "Git", "version control", "commit", "branch", "merge", "pull", "push", "clone",
+    "fork", "repository", "repo", "GitHub", "GitLab", "pull request", "merge request",
+    "code review", "collaboration", "history", "diff", "conflict resolution"
+  ],
+  
+  "devops": [
+    "DevOps", "CI/CD", "continuous integration", "continuous deployment", "automation",
+    "pipeline", "build", "test", "deploy", "monitoring", "infrastructure",
+    "GitHub Actions", "Jenkins", "deployment", "environment", "production"
+  ],
+  
+  "testing": [
+    "testing", "unit test", "integration test", "test case", "test coverage", "debugging",
+    "quality assurance", "QA", "automated testing", "manual testing", "bug fix",
+    "test-driven development", "TDD", "assertion", "mock", "test framework"
+  ],
+  
+  "performance": [
+    "performance", "optimization", "speed", "load time", "memory usage", "CPU usage",
+    "caching", "compression", "minification", "lazy loading", "pagination",
+    "database optimization", "query optimization", "monitoring", "profiling"
+  ],
+  
+  "security": [
+    "security", "authentication", "authorization", "encryption", "password", "login",
+    "user management", "access control", "data protection", "privacy", "HTTPS",
+    "SSL", "vulnerability", "security audit", "best practices", "compliance"
+  ],
+  
+  "mobile": [
+    "mobile", "responsive", "mobile-first", "touch", "gesture", "mobile app",
+    "cross-platform", "iOS", "Android", "React Native", "Flutter", "Progressive Web App",
+    "PWA", "mobile optimization", "app store", "mobile UX"
+  ],
+  
+  "monitoring": [
+    "monitoring", "logging", "analytics", "metrics", "performance monitoring", "error tracking",
+    "uptime", "health check", "alerting", "dashboard", "observability", "debugging",
+    "application monitoring", "infrastructure monitoring", "user analytics"
+  ],
+  
+  "documentation": [
+    "documentation", "docs", "README", "API documentation", "code comments", "tutorial",
+    "guide", "how-to", "troubleshooting", "FAQ", "changelog", "contributing guide",
+    "installation guide", "user manual", "technical writing", "markdown"
+  ],
+  
+  "beginner_friendly": [
+    "beginner-friendly", "tutorial", "getting started", "step-by-step", "learn",
+    "basics", "introduction", "simple", "easy", "example", "walkthrough",
+    "guide", "documentation", "help", "support", "community", "learning resource"
+  ],
+  
+  "github_issues": [
+    "bug", "feature request", "enhancement", "issue", "problem", "error", "fix",
+    "improvement", "suggestion", "question", "help wanted", "good first issue",
+    "documentation", "setup", "installation", "configuration", "compatibility",
+    "performance issue", "security vulnerability", "user experience", "accessibility"
+  ],
+  
+  "collaboration": [
+    "collaboration", "team", "code review", "pull request", "merge request", "feedback",
+    "discussion", "contribution", "open source", "community", "mentoring",
+    "pair programming", "knowledge sharing", "best practices", "standards"
+  ],
+  
+  "deployment": [
+    "deployment", "hosting", "production", "staging", "environment", "release",
+    "publishing", "go-live", "rollout", "launch", "server", "cloud deployment",
+    "containerization", "scalability", "availability", "backup", "rollback"
+  ]
+}
