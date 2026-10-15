@@ -46,7 +46,7 @@ export const PROVIDERS: ProviderInfo[] = [
     label: "Groq",
     keyUrl: "https://console.groq.com/keys",
     placeholder: "gsk_…",
-    preferred: [/llama-3\.3-70b/, /llama.*70b/, /llama/],
+    preferred: [/gpt-oss-120b/, /llama-4-maverick/, /llama-3\.3-70b/, /kimi-k2/, /qwen3-32b/, /llama.*70b/],
     note: "Very fast, with a free tier.",
   },
   {
@@ -95,14 +95,36 @@ export function detectProvider(key: string): ProviderId | null {
   return null;
 }
 
-/** Picks a default model from the provider's live list: the newest match of the first preferred pattern that hits. */
+// Models that are poor at multi-step plans: tiny parameter counts and special-purpose models.
+const SPECIAL_PURPOSE = /guard|allam|whisper|tts|embed|moderation|vision|audio|ocr|rerank|search|saba|compound|coder|math|prompt-guard/i;
+const SMALL = /(^|[^\d.])(0\.\d+|1|1\.5|2|3|4|7|8|9)b(\b|-|$)|nano|tiny|instant|lite/i;
+const STRONG = /\d{2,3}b|large|pro|opus|sonnet|maverick|kimi|gpt-oss|gpt-[45]|gemini|grok|deepseek-(chat|v\d|r\d)|claude|mistral-(medium|large)/i;
+
+/** True for models likely to give garbled or shallow plans, so the UI can warn. */
+export function isLikelyWeakModel(model: string): boolean {
+  return SPECIAL_PURPOSE.test(model) || (SMALL.test(model) && !STRONG.test(model.replace(SMALL, "")));
+}
+
+function score(model: string): number {
+  if (SPECIAL_PURPOSE.test(model)) return -10;
+  return (STRONG.test(model) ? 3 : 0) - (SMALL.test(model) ? 2 : 0);
+}
+
+const newest = (list: string[]) => {
+  const sorted = [...list].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  return sorted[sorted.length - 1] ?? "";
+};
+
+/**
+ * Picks a default model from the provider's live list: the newest match of the first preferred
+ * pattern that hits, else the highest-scoring capable model (never just the first alphabetically).
+ */
 export function pickDefaultModel(provider: ProviderInfo, models: string[]): string {
   for (const pattern of provider.preferred) {
-    const hits = models.filter((m) => pattern.test(m));
-    if (hits.length) {
-      const sorted = hits.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-      return sorted[sorted.length - 1];
-    }
+    const hits = models.filter((m) => pattern.test(m) && !SPECIAL_PURPOSE.test(m));
+    if (hits.length) return newest(hits);
   }
-  return models[0] ?? "";
+  if (!models.length) return "";
+  const best = Math.max(...models.map(score));
+  return newest(models.filter((m) => score(m) === best));
 }

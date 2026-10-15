@@ -1,5 +1,13 @@
 import type { ParsedPlan, PlanStep } from "../types";
 
+/** Some models write "\n" literally (copying JSON escaping); turn those back into line breaks. */
+export function normalizeModelText(text: string): string {
+  const literal = (text.match(/\\n/g) ?? []).length;
+  const real = (text.match(/\n/g) ?? []).length;
+  if (literal < 2 || literal <= real) return text;
+  return text.replace(/\\r\\n/g, "\n").replace(/\\n/g, "\n").replace(/\\"/g, '"');
+}
+
 const STEP_RE = /^\s{0,3}(?:#+\s*)?(?:step\s*)?(\d{1,2})[.):]\s+(.+)$/i;
 
 function splitTitle(text: string): PlanStep {
@@ -19,7 +27,8 @@ function splitTitle(text: string): PlanStep {
  * bullet (usually the closing question) becomes the outro.
  * Plans with fewer than two numbered steps are left as plain text.
  */
-export function parsePlan(raw: string): ParsedPlan {
+export function parsePlan(input: string): ParsedPlan {
+  const raw = normalizeModelText(input);
   const lines = raw.replace(/\r\n/g, "\n").split("\n");
   const intro: string[] = [];
   const steps: { head: string; body: string[] }[] = [];

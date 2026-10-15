@@ -141,11 +141,18 @@ export function PlanView({
                 <span className="author">firstpr</span>
                 <span className="badge">bot</span>
                 <span>{planLoading ? "is writing a plan…" : "commented"}</span>
-                {steps.length > 0 && (
-                  <span className="small spacer">
-                    {doneCount} of {steps.length} tasks
-                  </span>
-                )}
+                <span className="row spacer" style={{ gap: 12 }}>
+                  {steps.length > 0 && (
+                    <span className="small">
+                      {doneCount} of {steps.length} tasks
+                    </span>
+                  )}
+                  {plan && !planLoading && (
+                    <button type="button" className="btn btn-xs" onClick={onRetryPlan} title="Ask the mentor for a new plan">
+                      Regenerate
+                    </button>
+                  )}
+                </span>
               </div>
               <div className="comment-body">
                 {planLoading && (
