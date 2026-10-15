@@ -1,4 +1,5 @@
 import ReactMarkdown from "react-markdown";
+import { normalizeModelText } from "../lib/plan";
 
 /** Renders model output as markdown. Raw HTML in the text is not rendered. */
 export function Markdown({ text }: { text: string }) {
@@ -13,7 +14,7 @@ export function Markdown({ text }: { text: string }) {
           ),
         }}
       >
-        {text}
+        {normalizeModelText(text)}
       </ReactMarkdown>
     </div>
   );

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as api from "../lib/api";
 import { isComplete, type AISettings } from "../lib/aiSettings";
-import { PROVIDERS, detectProvider, pickDefaultModel, providerInfo, type ProviderId } from "../lib/providers";
+import { PROVIDERS, detectProvider, isLikelyWeakModel, pickDefaultModel, providerInfo, type ProviderId } from "../lib/providers";
 import { AlertIcon, CheckCircleIcon, SpinnerIcon, XIcon } from "./Icons";
 
 type Check = { state: "idle" } | { state: "running" } | { state: "ok"; text: string } | { state: "error"; text: string };
@@ -209,6 +209,25 @@ export function AISettingsDialog({
               {modelsState.state === "ok" && <span className="muted">{modelsState.text}. Clear the field to see them all.</span>}
               {modelsState.state === "error" && <span style={{ color: "var(--danger)" }}>{modelsState.text}</span>}
             </span>
+            {draft.model && isLikelyWeakModel(draft.model) && (
+              <span className="small" style={{ color: "var(--attention)" }}>
+                “{draft.model}” looks like a small or special-purpose model. Plans may come out garbled or shallow; a
+                larger general model works much better.
+                {models.length > 0 && pickDefaultModel(info, models) !== draft.model && (
+                  <>
+                    {" "}
+                    <button
+                      type="button"
+                      className="link-btn"
+                      style={{ color: "var(--accent)" }}
+                      onClick={() => update({ model: pickDefaultModel(info, models) })}
+                    >
+                      Use {pickDefaultModel(info, models)}
+                    </button>
+                  </>
+                )}
+              </span>
+            )}
           </div>
 
           <label className="row" style={{ gap: 8, flexWrap: "nowrap", alignItems: "flex-start", cursor: "pointer" }}>
