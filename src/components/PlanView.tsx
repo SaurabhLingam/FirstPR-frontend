@@ -28,6 +28,7 @@ export function PlanView({
   sending,
   error,
   onRetryPlan,
+  onOpenAI,
   onDismissError,
   onToggleStep,
   onSend,
@@ -43,6 +44,7 @@ export function PlanView({
   sending: boolean;
   error: string;
   onRetryPlan: () => void;
+  onOpenAI: () => void;
   onDismissError: () => void;
   onToggleStep: (i: number) => void;
   onSend: (text: string) => void;
@@ -122,7 +124,12 @@ export function PlanView({
         <div className="main">
           {error && (
             <Flash kind="error" title="Something went wrong" onDismiss={onDismissError}
-              actions={!plan ? <button type="button" className="btn btn-sm" onClick={onRetryPlan}>Try again</button> : undefined}>
+              actions={
+                <>
+                  {!plan && <button type="button" className="btn btn-sm" onClick={onRetryPlan}>Try again</button>}
+                  <button type="button" className="btn btn-sm" onClick={onOpenAI}>AI settings</button>
+                </>
+              }>
               {error}
             </Flash>
           )}

@@ -19,6 +19,8 @@ export function SetupView({
   showWelcome,
   onDismissWelcome,
   onOpenHelp,
+  aiConnected,
+  onOpenAI,
 }: {
   repoInput: string;
   onRepoInput: (v: string) => void;
@@ -31,6 +33,8 @@ export function SetupView({
   showWelcome: boolean;
   onDismissWelcome: () => void;
   onOpenHelp: () => void;
+  aiConnected: boolean;
+  onOpenAI: () => void;
 }) {
   const [draft, setDraft] = useState("");
   const [touched, setTouched] = useState(false);
@@ -81,6 +85,11 @@ export function SetupView({
     },
     { title: "Add at least one skill", help: "Languages, frameworks or tools you're comfortable with.", done: skills.length > 0 },
     { title: "Click “Find issues”", help: "We'll rank beginner-friendly issues for you. It can take up to a minute.", done: hasSearched },
+    {
+      title: "Connect an AI provider",
+      help: "Needed for plans and the mentor chat. Bring your own key from OpenAI, Anthropic, Gemini, OpenRouter, Groq and more.",
+      done: aiConnected,
+    },
   ];
   const suggestions = SUGGESTED_SKILLS.filter((s) => !skills.includes(s)).slice(0, 4);
   const expandedTotal = skills.reduce((n, s) => n + 1 + expandSkill(s).length, 0);
@@ -90,13 +99,18 @@ export function SetupView({
       <form className="main" onSubmit={submit} noValidate>
         {showWelcome && (
           <Flash
-            title="New here? Three steps to get going."
+            title="New here? A few steps to get going."
             onDismiss={onDismissWelcome}
             actions={
               <>
                 <button type="button" className="btn btn-sm" onClick={() => onRepoInput(EXAMPLE_REPO)}>
                   Try an example repo
                 </button>
+                {!aiConnected && (
+                  <button type="button" className="btn btn-sm" onClick={onOpenAI}>
+                    Connect AI
+                  </button>
+                )}
                 <button type="button" className="btn btn-sm" onClick={onOpenHelp}>
                   Read the FAQ
                 </button>

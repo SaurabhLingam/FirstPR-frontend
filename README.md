@@ -38,6 +38,8 @@ On Windows PowerShell, set the variable first: `$env:VITE_BACKEND_URL="http://lo
 
 `vercel.json` tells Vercel to install with `npm ci`, build with `npm run build` and serve `dist/`, so it works even if the project was set up as a static site. To use a different backend, set `VITE_BACKEND_URL` under Project → Settings → Environment Variables and redeploy.
 
+`vercel.json` also sets a Content-Security-Policy whose `connect-src` only allows `https://*.hf.space`. If the backend moves to another host, add it there too, or the browser will block the requests. The policy matters because users' AI keys live in the browser: it blocks third-party scripts and stops the page sending data anywhere but the backend.
+
 ## Layout
 
 ```
@@ -48,15 +50,19 @@ src/
   lib/github.ts        repo/issue URL parsing, reading issues out of /recommend
   lib/plan.ts          turns the mentor's numbered plan into checklist steps
   lib/storage.ts       safe session/local storage
+  lib/providers.ts     AI provider presets, key-prefix hints, default-model picking
+  lib/aiSettings.ts    the user's provider/key/model, stored in the browser
   data/skill_map.json  copy of the backend's skill_map.json (keep in sync)
 mock/server.mjs        offline stand-in for the backend
 ```
 
+## Bring your own key
+
+The mentor runs on the user's own API key. Under **Connect AI** they pick a provider (OpenAI, Anthropic, Google Gemini, OpenRouter, Groq, Mistral, DeepSeek, xAI, or a custom OpenAI-compatible endpoint), paste a key, and choose a model from the provider's live list. Settings live in the browser (`localStorage`, or `sessionStorage` if "Remember" is off) and go to the backend as `X-LLM-*` headers on each request. Finding issues needs no key.
+
 ## Backend contract
 
-The app works with the backend as deployed today, and uses newer fields when they exist:
-
-- Every request sends `skills`. Older backends ignore it, so the app also calls `/init` before `/recommend` and `/plan`.
-- `/recommend` currently returns only a markdown `message`; the app reads issue links, titles and fit % from it.
-  If the response includes an `issues` array (the backend's internal issue dicts), the app uses that instead,
-  which adds labels and exact fit scores.
+- Every request sends `skills`; mentor requests also send the `X-LLM-*` headers.
+- `/recommend` returns structured `issues` (labels, fit scores, matched skills) and, when a key is set, the mentor's `message`.
+  For older backends that return only a markdown `message`, the app reads issue links, titles and fit % out of it.
+- A `401` from the backend opens the AI settings dialog.

@@ -24,6 +24,8 @@ export function Header({
   status,
   helpOpen,
   onToggleHelp,
+  aiLabel,
+  onOpenAI,
 }: {
   repo: RepoRef | null;
   stage: Stage;
@@ -32,6 +34,9 @@ export function Header({
   status: BackendStatus;
   helpOpen: boolean;
   onToggleHelp: () => void;
+  /** e.g. "Anthropic · claude-…", or null when no provider is connected. */
+  aiLabel: string | null;
+  onOpenAI: () => void;
 }) {
   const activeTab = stage === "scanning" ? "issues" : stage;
   return (
@@ -48,6 +53,10 @@ export function Header({
           <span className={repo ? "strong" : "muted"}>{repo?.name ?? "repo"}</span>
         </nav>
         <div className="row spacer" style={{ gap: 12 }}>
+          <button type="button" className="btn ai-pill" onClick={onOpenAI} title="AI provider settings">
+            {aiLabel ? <span className="status-dot online" /> : <span className="warn-dot" />}
+            <span>{aiLabel ?? "Connect AI"}</span>
+          </button>
           <button type="button" className="btn" onClick={onToggleHelp} aria-expanded={helpOpen}>
             <HelpIcon />
             Help
