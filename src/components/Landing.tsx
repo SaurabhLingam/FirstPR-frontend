@@ -164,7 +164,7 @@ const PIPELINE = [
   { name: "GitHub API", detail: "Fetches open issues from the repository, skipping pull requests. Issues labeled good first issue, help wanted, documentation or beginner come first." },
   { name: "Classifier", detail: "If nothing is labeled for newcomers, a random-forest model trained on GitHub issues picks the ones that look beginner-friendly." },
   { name: "Skill matching", detail: "Your skills are expanded into related terms, then sentence embeddings compare them with each issue's title and body to produce a fit score." },
-  { name: "AI mentor", detail: "Gemini ranks the best matches, writes a no-code plan for the issue you pick, and answers follow-up questions in context." },
+  { name: "AI mentor", detail: "The model you choose — with your own key — writes a no-code plan for the issue you pick and answers follow-up questions in context." },
 ];
 
 const FEATURES = [
@@ -173,7 +173,8 @@ const FEATURES = [
   { title: "Plans, not code", body: "You get the steps, the files to look at and how to verify — the change stays yours." },
   { title: "A mentor on call", body: "Ask follow-ups about any step. Answers stay focused on your issue." },
   { title: "Progress you can see", body: "Check tasks off as you go. Your work is kept while the tab is open." },
-  { title: "Read-only and private", body: "FirstPR only reads public GitHub data. Nothing is posted on your behalf." },
+  { title: "Bring your own AI", body: "Use your key from OpenAI, Anthropic, Gemini, OpenRouter, Groq and more. Finding issues needs no key at all." },
+  { title: "Read-only and private", body: "FirstPR only reads public GitHub data. Your key is never stored on the server." },
 ];
 
 export function Landing() {
@@ -288,8 +289,8 @@ export function Landing() {
             <p className="muted">{PIPELINE[stage].detail}</p>
           </div>
           <p className="small muted">
-            Stack: React + TypeScript on the front; FastAPI, PyGithub, scikit-learn, sentence-transformers and Gemini on the{" "}
-            <a href={BACKEND_URL} target="_blank" rel="noopener noreferrer">backend</a>.
+            Stack: React + TypeScript on the front; FastAPI, PyGithub, scikit-learn and sentence-transformers on the{" "}
+            <a href={BACKEND_URL} target="_blank" rel="noopener noreferrer">backend</a>, plus the AI provider of your choice.
           </p>
         </section>
 

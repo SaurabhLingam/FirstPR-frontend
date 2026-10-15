@@ -20,6 +20,9 @@ import { ScanView } from "./components/ScanView";
 import { IssuesView } from "./components/IssuesView";
 import { PlanView } from "./components/PlanView";
 import { Flash } from "./components/Common";
+import { AISettingsDialog } from "./components/AISettingsDialog";
+import { clearAISettings, isComplete, loadAISettings, saveAISettings, type AISettings } from "./lib/aiSettings";
+import { providerInfo } from "./lib/providers";
 
 const SESSION_KEY = "firstpr:session";
 const HINTS_KEY = "firstpr:hints";
@@ -70,6 +73,10 @@ function isAbort(e: unknown) {
   return e instanceof ApiError && e.kind === "aborted";
 }
 
+function needsAISettings(e: unknown) {
+  return e instanceof ApiError && e.status === 401;
+}
+
 function errorText(e: unknown) {
   return e instanceof Error ? e.message : "Something unexpected went wrong.";
 }
@@ -97,6 +104,15 @@ export default function App() {
   const [planError, setPlanError] = useState("");
   const [helpOpen, setHelpOpen] = useState(false);
   const [hints, setHints] = useState<Hints>(() => load("local", HINTS_KEY, ALL_HINTS, isHints));
+
+  const [ai, setAi] = useState<AISettings | null>(() => {
+    const s = loadAISettings();
+    api.setAISettings(s);
+    return s;
+  });
+  const [aiOpen, setAiOpen] = useState(false);
+  const [aiReason, setAiReason] = useState("");
+  const aiReady = isComplete(ai);
 
   const abortRef = useRef<AbortController | null>(null);
   const statusRef = useRef(status);
@@ -169,12 +185,6 @@ export default function App() {
     setStage("scanning");
     try {
       await wake(ctrl.signal);
-      try {
-        // Older backends read skills from /init instead of each request.
-        await api.init(skills, ctrl.signal);
-      } catch (e) {
-        if (isAbort(e)) throw e;
-      }
       const res = await api.recommend(repo.url, skills, ctrl.signal);
       const message = (res.message ?? "").trim();
       const list = res.issues?.length ? normalizeIssues(res.issues) : extractRecommendedIssues(message);
@@ -206,16 +216,38 @@ export default function App() {
     setSessions((prev) => (prev[url] ? { ...prev, [url]: fn(prev[url]) } : prev));
   }, []);
 
-  async function fetchPlan(issue: Issue) {
+  function openAI(reason = "") {
+    setAiReason(reason);
+    setAiOpen(true);
+  }
+
+  function saveAI(s: AISettings) {
+    saveAISettings(s);
+    api.setAISettings(s);
+    setAi(s);
+    setAiOpen(false);
+    setPlanError("");
+    // Pick up where the user was: a plan that couldn't be made without a key.
+    if (stage === "plan" && active && !active.plan && busy === null) void fetchPlan(active.issue, s);
+  }
+
+  function clearAI() {
+    clearAISettings();
+    api.setAISettings(null);
+    setAi(null);
+    setAiOpen(false);
+  }
+
+  async function fetchPlan(issue: Issue, settings: AISettings | null = ai) {
+    if (!isComplete(settings)) {
+      setPlanError("Connect an AI provider to get a plan for this issue. It takes your own API key from any supported provider.");
+      openAI();
+      return;
+    }
     const ctrl = begin("plan");
     setPlanError("");
     try {
       await wake(ctrl.signal);
-      try {
-        await api.init(skills, ctrl.signal);
-      } catch (e) {
-        if (isAbort(e)) throw e;
-      }
       const res = await api.plan(`https://github.com/${issue.repo}`, issue.url, skills, ctrl.signal);
       const text = (res.plan ?? "").trim();
       if (!text) throw new Error("The mentor returned an empty plan. Try again.");
@@ -225,6 +257,7 @@ export default function App() {
       if (isAbort(e)) return;
       noteFailure(e);
       setPlanError(errorText(e));
+      if (needsAISettings(e)) openAI(errorText(e));
     } finally {
       finish(ctrl);
     }
@@ -271,6 +304,12 @@ export default function App() {
       return;
     }
 
+    if (!aiReady) {
+      setPlanError("Connect an AI provider to chat with the mentor.");
+      openAI();
+      return;
+    }
+
     const url = active.issue.url;
     const userMsg: ChatMessage = { role: "user", content: text };
     const messages = [...active.messages, userMsg];
@@ -291,6 +330,7 @@ export default function App() {
       if (isAbort(e)) return;
       noteFailure(e);
       setPlanError(`Your message wasn't answered: ${errorText(e)}`);
+      if (needsAISettings(e)) openAI(errorText(e));
     } finally {
       finish(ctrl);
     }
@@ -314,12 +354,22 @@ export default function App() {
         status={status}
         helpOpen={helpOpen}
         onToggleHelp={() => setHelpOpen((o) => !o)}
+        aiLabel={aiReady ? `${providerInfo(ai.provider)?.label ?? ai.provider} · ${ai.model}` : null}
+        onOpenAI={() => openAI()}
         onTab={goTab}
         tabs={[
           { id: "setup", label: "Setup", enabled: true },
           { id: "issues", label: "Issues", count: hasSearched ? issues.length : undefined, enabled: hasSearched },
           { id: "plan", label: "Plan", enabled: !!active },
         ]}
+      />
+      <AISettingsDialog
+        open={aiOpen}
+        initial={ai}
+        reason={aiReason}
+        onSave={saveAI}
+        onClear={clearAI}
+        onClose={() => setAiOpen(false)}
       />
       <main className="container">
         {helpOpen && (
@@ -361,6 +411,8 @@ export default function App() {
             showWelcome={hints.welcome}
             onDismissWelcome={() => setHints((h) => ({ ...h, welcome: false }))}
             onOpenHelp={() => setHelpOpen(true)}
+            aiConnected={aiReady}
+            onOpenAI={() => openAI()}
           />
         )}
 
@@ -396,6 +448,7 @@ export default function App() {
             sending={busy === "chat"}
             error={planError}
             onRetryPlan={() => fetchPlan(active.issue)}
+            onOpenAI={() => openAI()}
             onDismissError={() => setPlanError("")}
             onToggleStep={(i) =>
               updateSession(active.issue.url, (s) => {

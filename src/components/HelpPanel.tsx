@@ -14,6 +14,14 @@ export const FAQS = [
     a: "No. It gives you a plan and answers questions, so you learn the codebase and the change is genuinely yours.",
   },
   {
+    q: "Which AI providers can I use?",
+    a: "Bring your own key from OpenAI, Anthropic, Google Gemini, OpenRouter, Groq, Mistral, DeepSeek, xAI, or any OpenAI-compatible endpoint. Pick the provider and model under “Connect AI”.",
+  },
+  {
+    q: "Where does my API key go?",
+    a: "It's kept in your browser and sent over HTTPS with each mentor request to the FirstPR backend, which passes it to your provider for that request only. The server never stores or logs it.",
+  },
+  {
     q: "Do I need a GitHub account?",
     a: "Not to browse here. You'll need a free one to fork the repo and open your pull request.",
   },

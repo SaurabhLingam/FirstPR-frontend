@@ -1,5 +1,12 @@
 import type { ChatMessage } from "../types";
 import type { RawIssue } from "./github";
+import { aiHeaders, type AISettings } from "./aiSettings";
+
+// The user's AI provider settings, sent as headers with every request (bring your own key).
+let currentAI: AISettings | null = null;
+export function setAISettings(s: AISettings | null) {
+  currentAI = s;
+}
 
 export const BACKEND_URL = (
   (import.meta.env.VITE_BACKEND_URL as string | undefined) || "https://confusedguy-firstpr-backend.hf.space"
@@ -50,9 +57,11 @@ interface RequestOptions {
   body?: unknown;
   timeoutMs: number;
   signal?: AbortSignal;
+  /** Overrides the saved AI settings (e.g. testing a key before saving it). */
+  ai?: AISettings | null;
 }
 
-async function request<T>(path: string, { method = "POST", body, timeoutMs, signal }: RequestOptions): Promise<T> {
+async function request<T>(path: string, { method = "POST", body, timeoutMs, signal, ai }: RequestOptions): Promise<T> {
   const ctrl = new AbortController();
   let timedOut = false;
   const timer = setTimeout(() => {
@@ -69,7 +78,10 @@ async function request<T>(path: string, { method = "POST", body, timeoutMs, sign
     try {
       res = await fetch(`${BACKEND_URL}${path}`, {
         method,
-        headers: body === undefined ? undefined : { "Content-Type": "application/json" },
+        headers: {
+          ...(body === undefined ? {} : { "Content-Type": "application/json" }),
+          ...aiHeaders(ai === undefined ? currentAI : ai),
+        },
         body: body === undefined ? undefined : JSON.stringify(body),
         signal: ctrl.signal,
       });
@@ -136,15 +148,20 @@ export async function ensureAwake(
   throw new ApiError("The backend didn't start in time. Please try again in a minute.", "timeout");
 }
 
-export interface RecommendResponse {
-  message?: string;
-  count?: number;
-  issues?: RawIssue[];
+/** Live model list from the user's provider (key sent as a header, never stored). */
+export function llmModels(ai: AISettings, signal?: AbortSignal) {
+  return request<{ models?: string[] }>("/llm/models", { timeoutMs: 30_000, signal, ai });
 }
 
-/** Legacy: older backends keep skills from /init in server state. Newer ones read `skills` on each request. */
-export function init(skills: string[], signal?: AbortSignal) {
-  return request<{ ok?: boolean; skills?: string[] }>("/init", { body: { skills }, timeoutMs: 30_000, signal });
+/** Sends one tiny prompt to confirm the key and model work. */
+export function llmCheck(ai: AISettings, signal?: AbortSignal) {
+  return request<{ ok?: boolean; provider?: string; model?: string }>("/llm/check", { timeoutMs: 60_000, signal, ai });
+}
+
+export interface RecommendResponse {
+  message?: string | null;
+  count?: number;
+  issues?: RawIssue[];
 }
 
 export function recommend(repoUrl: string, skills: string[], signal?: AbortSignal) {
