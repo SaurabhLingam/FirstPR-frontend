@@ -38,6 +38,8 @@ On Windows PowerShell, set the variable first: `$env:VITE_BACKEND_URL="http://lo
 
 `vercel.json` tells Vercel to install with `npm ci`, build with `npm run build` and serve `dist/`, so it works even if the project was set up as a static site. To use a different backend, set `VITE_BACKEND_URL` under Project → Settings → Environment Variables and redeploy.
 
+`vercel.json` also sets a Content-Security-Policy whose `connect-src` only allows `https://*.hf.space`. If the backend moves to another host, add it there too, or the browser will block the requests. The policy matters because users' AI keys live in the browser: it blocks third-party scripts and stops the page sending data anywhere but the backend.
+
 ## Layout
 
 ```
