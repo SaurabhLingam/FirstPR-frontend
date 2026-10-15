@@ -19,6 +19,8 @@ export class ApiError extends Error {
     message: string,
     readonly kind: ApiErrorKind,
     readonly status: number | null = null,
+    /** True when our backend answered with its own error message, i.e. it is up. */
+    readonly fromBackend = false,
   ) {
     super(message);
     this.name = "ApiError";
@@ -100,7 +102,10 @@ async function request<T>(path: string, { method = "POST", body, timeoutMs, sign
         data = null;
       }
     }
-    if (!res.ok) throw new ApiError(formatErrorBody(data, res.status), "http", res.status);
+    if (!res.ok) {
+      const fromBackend = !!data && typeof data === "object" && "detail" in (data as object);
+      throw new ApiError(formatErrorBody(data, res.status), "http", res.status, fromBackend);
+    }
     return (data ?? {}) as T;
   } finally {
     clearTimeout(timer);

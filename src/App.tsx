@@ -174,7 +174,11 @@ export default function App() {
   }
 
   function noteFailure(e: unknown) {
-    if (e instanceof ApiError && (e.kind === "network" || e.status === 502 || e.status === 503)) setStatus("offline");
+    if (e instanceof ApiError && e.fromBackend) setStatus("online");
+    // Only when the backend itself isn't answering: an error it relays from an AI provider
+    // (e.g. a 502 with a message) means it's up.
+    if (e instanceof ApiError && !e.fromBackend && (e.kind === "network" || (e.status !== null && e.status >= 502)))
+      setStatus("offline");
   }
 
   // ---------- actions ----------
