@@ -76,12 +76,17 @@ function errorText(e: unknown) {
 
 export default function App() {
   const initial = useMemo(() => load("session", SESSION_KEY, EMPTY, isPersisted), []);
-  const [repoInput, setRepoInput] = useState(initial.repoInput);
+  const [repoInput, setRepoInput] = useState(
+    // The landing page can link to /app?repo=… to prefill the repository.
+    () => new URLSearchParams(window.location.search).get("repo") ?? initial.repoInput,
+  );
   const [skills, setSkills] = useState<string[]>(initial.skills);
   const [issues, setIssues] = useState<Issue[]>(initial.issues);
   const [recMessage, setRecMessage] = useState(initial.recMessage);
   const [searchedRepo, setSearchedRepo] = useState<RepoRef | null>(initial.searchedRepo);
-  const [stage, setStage] = useState<Stage>(initial.stage === "scanning" ? "setup" : initial.stage);
+  const [stage, setStage] = useState<Stage>(() =>
+    initial.stage === "scanning" || new URLSearchParams(window.location.search).has("repo") ? "setup" : initial.stage,
+  );
   const [sessions, setSessions] = useState<Record<string, IssueSession>>(initial.sessions);
   const [activeUrl, setActiveUrl] = useState<string | null>(initial.activeUrl);
 
