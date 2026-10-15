@@ -1,6 +1,6 @@
 import { XIcon } from "./Icons";
 
-const FAQS = [
+export const FAQS = [
   {
     q: "What is a “good first issue”?",
     a: "A small, well-described task that maintainers have marked as suitable for newcomers. FirstPR looks for these labels first.",
