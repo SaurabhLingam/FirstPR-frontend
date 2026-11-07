@@ -44,7 +44,7 @@ Wanting to contribute to open source is easy. Knowing **which issue to pick** an
 flowchart LR
     A[GitHub repo] --> B{Labeled<br/>beginner issues?}
     B -- yes --> D[Skill matching<br/><sub>sentence embeddings</sub>]
-    B -- no --> C[Classifier<br/><sub>random forest</sub>] --> D
+    B -- no --> C[Classifier<br/><sub>ranks unlabeled issues</sub>] --> D
     D --> E[Ranked issues]
     E -- you pick one --> F[AI mentor<br/><sub>your key, your model</sub>]
     F --> G[Plan + chat]
@@ -72,7 +72,7 @@ The mentor runs on **your own API key**. Open **Connect AI** in the app, pick a 
 ## 🧰 Tech stack
 
 - **Frontend (this repo):** React 18, TypeScript (strict), Vite, `react-markdown`, deployed on Vercel. Styled after GitHub's dark theme (Primer colors, system fonts) with no UI framework.
-- **Backend:** FastAPI on a [Hugging Face Space](https://huggingface.co/spaces/confusedguy/firstpr-backend), using PyGithub, scikit-learn (beginner-issue classifier), sentence-transformers (`all-MiniLM-L6-v2`) and a provider-agnostic LLM layer over plain HTTP.
+- **Backend:** FastAPI on a [Hugging Face Space](https://huggingface.co/spaces/confusedguy/firstpr-backend), using PyGithub, scikit-learn (beginner-issue classifier, [evaluated on 799 recent issues](https://huggingface.co/spaces/confusedguy/firstpr-backend/blob/main/eval/report.md)), sentence-transformers (`all-MiniLM-L6-v2`) and a provider-agnostic LLM layer over plain HTTP.
 
 ## 💻 Run it locally
 

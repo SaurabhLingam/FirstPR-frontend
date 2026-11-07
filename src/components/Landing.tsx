@@ -162,7 +162,7 @@ const STEPS = [
 // ---------- pipeline ----------
 const PIPELINE = [
   { name: "GitHub API", detail: "Fetches open issues from the repository, skipping pull requests. Issues labeled good first issue, help wanted, documentation or beginner come first." },
-  { name: "Classifier", detail: "If nothing is labeled for newcomers, a random-forest model trained on GitHub issues picks the ones that look beginner-friendly." },
+  { name: "Classifier", detail: "If nothing is labeled for newcomers, a text classifier trained on recent real GitHub issues ranks the open ones by how beginner-friendly they look." },
   { name: "Skill matching", detail: "Your skills are expanded into related terms, then sentence embeddings compare them with each issue's title and body to produce a fit score." },
   { name: "AI mentor", detail: "The model you choose — with your own key — writes a no-code plan for the issue you pick and answers follow-up questions in context." },
 ];
